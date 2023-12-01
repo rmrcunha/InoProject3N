@@ -1,42 +1,43 @@
 #include <LiquidCrystal.h>
 
-LiquidCrystal lcd(6, 7, 8, 9, 10, 11);
-int buttonPinNext = 2;
-int buttonPinPrev = 3;
-int buttonPinStay = 4;
-int buttonPinBack = 5;
+#define button A0
+
+LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
+
 int counter = 65;
 unsigned int currentLocation = 0;
 
-void setup() {
+void setup() 
+{
   lcd.begin(16, 2);
-  pinMode(buttonPinNext, INPUT);
-  pinMode(buttonPinPrev, INPUT);
-  pinMode(buttonPinStay, INPUT);
-  pinMode(buttonPinBack, INPUT);
+  pinMode(button, INPUT);
 }
 
-void loop() {
-  if (digitalRead(buttonPinNext) == LOW) {
+void loop() 
+{
+  Serial.println(analogRead(0));
+  delay(100);
+  if(analogRead(button)<80){
+    currentLocation++;
+    lcd.setCursor(currentLocation, 0);
+    delay(100);
+  }
+  else if (analogRead(button) < 200) {
     lcd.setCursor(currentLocation, 0);
     lcd.print((char)counter);
     counter++;
     delay(250);
   }
-  if (digitalRead(buttonPinPrev) == LOW) {
+  else if (analogRead(button) <400) {
     counter--;
     lcd.setCursor(currentLocation, 0);
     lcd.print((char)counter);
     delay(250);
   }
-  if(digitalRead(buttonPinStay)==LOW){
-    currentLocation++;
-    lcd.setCursor(currentLocation, 0);
-    delay(100);
-  }
-  if(digitalRead(buttonPinBack)==LOW){
+  else if(analogRead(button)<600){
     currentLocation--;
     lcd.setCursor(currentLocation, 0);
     delay(100);
   }
+  
 }
